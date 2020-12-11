@@ -6,6 +6,8 @@ r = sr.Recognizer()
 from time import sleep
 import pyttsx3
 engine = pyttsx3.init()
+import numpy as np
+import cv2
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
@@ -31,3 +33,26 @@ def listen():    #This function is to listen to a person talking. This function 
             say("Sorry, I did not get that")
             return("sorry")
 
+def see_people():
+    classifier = cv2.CascadeClassifier(r'C:\Users\asuto\Desktop\hackoff_stuff\haarcascade_fullbody.xml')
+    cam = cv2.VideoCapture(0)
+    while True:
+        ret , frame = cam.read()
+        sleep(3)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        m=[] 
+        bodies = classifier.detectMultiScale(gray, 1.1, 3)
+        m.append(bodies)
+        for (x,y,w,h) in bodies:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 255), 3)
+            cv2.putText(frame,len(m),(5,5),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
+            cv2.imshow('people', frame)
+            
+        k = cv2.waitKey(30) & 0xff
+        if k == 27:
+            break
+
+        cam.release()
+        cv2.destroyAllWindows()
+
+see_people()
