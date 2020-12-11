@@ -8,6 +8,7 @@ import pyttsx3
 engine = pyttsx3.init()
 import numpy as np
 import cv2
+import pyzbar.pyzbar as pyzbar
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
@@ -34,25 +35,41 @@ def listen():    #This function is to listen to a person talking. This function 
             return("sorry")
 
 def see_people():
-    classifier = cv2.CascadeClassifier(r'C:\Users\asuto\Desktop\hackoff_stuff\haarcascade_fullbody.xml')
-    cam = cv2.VideoCapture(0)
-    while True:
+    classifier = cv2.CascadeClassifier(r'C:\Users\asuto\Desktop\hackoff_stuff\haarcascade_eye.xml')
+    cam = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    #sleep(2)
+    while cam.isOpened():
         ret , frame = cam.read()
-        sleep(3)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        m=[] 
-        bodies = classifier.detectMultiScale(gray, 1.1, 3)
-        m.append(bodies)
-        for (x,y,w,h) in bodies:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 255), 3)
-            cv2.putText(frame,len(m),(5,5),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-            cv2.imshow('people', frame)
-            
+        m=[]
+        try: 
+            bodies = classifier.detectMultiScale(gray, 1.1, 3)
+            m.append(bodies)
+            for (x,y,w,h) in bodies:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 255), 3)
+                cv2.putText(frame,len(m),(5,5),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
+                cv2.imshow('LiftView', frame)
+        except:
+            cv2.imshow('LiftView', frame)
+
         k = cv2.waitKey(30) & 0xff
         if k == 27:
             break
+        
+    cam.release()
+    cv2.destroyAllWindows()
 
-        cam.release()
-        cv2.destroyAllWindows()
+def qr(op):   #This code is for QR Code scanning. Don' touch.
+    pic=op.copy()
+    info = pyzbar.decode(pic)
+    txt='lul'
+    if(len(info)>0):
+        for obj in info:
+            txt=(obj.data).decode("utf-8")
+            (x, y, w, h) = obj.rect
+            cv2.rectangle(pic,(x,y),(x+w,y+h),(0,0,255),2)
+            cv2.circle(pic,(x+w//2,y+h//2),3,(255,255,0),-1)
+        cv2.putText(pic,txt,(40,30),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
+    return(pic)  
 
 see_people()
