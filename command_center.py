@@ -34,23 +34,15 @@ def listen():    #This function is to listen to a person talking. This function 
             say("Sorry, I did not get that")
             return("sorry")
 
-def see_people():
-    classifier = cv2.CascadeClassifier(r'C:\Users\asuto\Desktop\hackoff_stuff\haarcascade_eye.xml')
-    cam = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+def see_people():    #This piece of code is to see the number of people in the lift.
+    cam = cv2.VideoCapture(0)
+    #cam = cv2.VideoCapture(r'C:\Users\asuto\Desktop\hackoff_stuff\testingvideo3.mp4')
     #sleep(2)
     while cam.isOpened():
-        ret , frame = cam.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        m=[]
-        try: 
-            bodies = classifier.detectMultiScale(gray, 1.1, 3)
-            m.append(bodies)
-            for (x,y,w,h) in bodies:
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 255), 3)
-                cv2.putText(frame,len(m),(5,5),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-                cv2.imshow('LiftView', frame)
-        except:
-            cv2.imshow('LiftView', frame)
+        _ , frame = cam.read()
+
+        frame,text = qrcode(frame)
+        cv2.imshow('LiftView', frame)
 
         k = cv2.waitKey(30) & 0xff
         if k == 27:
@@ -59,17 +51,17 @@ def see_people():
     cam.release()
     cv2.destroyAllWindows()
 
-def qr(op):   #This code is for QR Code scanning. Don' touch.
+def qrcode(op):  #QR Code scanning part
     pic=op.copy()
     info = pyzbar.decode(pic)
-    txt='lul'
+    txt='Unreadable'
     if(len(info)>0):
         for obj in info:
             txt=(obj.data).decode("utf-8")
             (x, y, w, h) = obj.rect
             cv2.rectangle(pic,(x,y),(x+w,y+h),(0,0,255),2)
-            cv2.circle(pic,(x+w//2,y+h//2),3,(255,255,0),-1)
-        cv2.putText(pic,txt,(40,30),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0,255,0),2)
-    return(pic)  
+            #cv2.circle(pic,(x+w//2,y+h//2),3,(255,255,0),-1)
+        cv2.putText(pic,txt,(40,50),cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
+    return(pic,txt)  
 
 see_people()
