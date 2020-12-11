@@ -18,13 +18,13 @@ def say(r):      #This function based a TTS engine to convert a given text to sp
 def listen():    #This function is to listen to a person talking. This function recognises the word or sentence told by the user.
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Kindly speak now:")
-        say("Kindly speak now")
+        print("Kindly tell your floor number now:")
+        say("Kindly tell your floor number now:")
         audio_text = r.listen(source)
         sleep(3)
-        print("Time over, thanks")
+        print("Time over, thankyou")
         try:
-            say("Did you say: "+r.recognize_google(audio_text))
+            say("Floor is:"+r.recognize_google(audio_text))
             print(r.recognize_google(audio_text))
             return(r.recognize_google(audio_text))
         except:
