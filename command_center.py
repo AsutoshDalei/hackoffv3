@@ -52,7 +52,7 @@ def see_people():    #This piece of code is to see the number of people in the l
         print(text)
         if text != None:
             print(int(text))
-            if time.time() - init_time > 10:
+            if (time.time() - init_time > 10) and int(text) in range(10):
                 push(int(text))
                 #print("sending")
                 break
@@ -89,4 +89,4 @@ def get_data():
 #push(13)
 #get_data()
 #say("please tell or show your required floor number")
-#see_people()
+see_people()
