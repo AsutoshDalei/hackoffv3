@@ -60,8 +60,11 @@ def see_people():    #This piece of code is to see the number of people in the l
             init_time = time.time()
             #if (time.time() - init_time > 10) and int(text) in range(10):
             if t > 35 and int(text) in range(10):
-                #push(int(text))
+                push(int(text))
                 print("sending")
+                break
+            
+            elif t>60 :
                 break
 
         k = cv2.waitKey(30) & 0xff
@@ -87,12 +90,16 @@ def qrcode(op):  #This piece of code scans for a QR code being shown to it by th
 
 def push(floor):
     firestore_db.collection(u'floor_level').add({'floor': floor})
+    say(f"going to floor {str(floor)}")
 
 def get_data():
     snapshots = list(firestore_db.collection(u'floor_level').get())
     for snapshot in snapshots:
-        print(snapshot.to_dict())
+        print(snapshot.to_dict()["floor"])
 
+def recheck():
+    say("any other floor?")
+    see_people()
 #push(13)
 #get_data()
 #say("please tell or show your required floor number")
