@@ -9,6 +9,14 @@ engine = pyttsx3.init()
 import numpy as np
 import cv2
 import pyzbar.pyzbar as pyzbar
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+#We initiate the firebase project, through which we can transfer the floor input to the NodeMCU.
+#Firebase is being added solely for the purpose of demonstration. Since we working from home.
+cred = credentials.Certificate(r"C:\Users\asuto\Desktop\hackoff_stuff\hackoffv3-firebase-adminsdk-4jlgc-e63f6f9a28.json")
+firebase_admin.initialize_app(cred)
+firestore_db = firestore.client()
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
@@ -36,8 +44,6 @@ def listen():    #This function is to listen to a person talking. This function 
 
 def see_people():    #This piece of code is to see the number of people in the lift.
     cam = cv2.VideoCapture(0)
-    #cam = cv2.VideoCapture(r'C:\Users\asuto\Desktop\hackoff_stuff\testingvideo3.mp4')
-    #sleep(2)
     while cam.isOpened():
         _ , frame = cam.read()
 
@@ -51,7 +57,7 @@ def see_people():    #This piece of code is to see the number of people in the l
     cam.release()
     cv2.destroyAllWindows()
 
-def qrcode(op):  #QR Code scanning part
+def qrcode(op):  #This piece of code scans for a QR code being shown to it by the user.
     pic=op.copy()
     info = pyzbar.decode(pic)
     txt='Unreadable'
@@ -64,4 +70,14 @@ def qrcode(op):  #QR Code scanning part
         cv2.putText(pic,txt,(40,50),cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
     return(pic,txt)  
 
-see_people()
+
+def push(floor):
+    firestore_db.collection(u'floor_level').add({'floor': floor})
+
+def get_data():
+    snapshots = list(firestore_db.collection(u'floor_level').get())
+    for snapshot in snapshots:
+        print(snapshot.to_dict())
+
+#push(3)
+#get_data()
