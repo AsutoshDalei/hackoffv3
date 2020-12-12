@@ -11,6 +11,8 @@ import cv2
 import pyzbar.pyzbar as pyzbar
 import firebase_admin
 from firebase_admin import credentials, firestore
+from multiprocessing import Process
+
 
 #We initiate the firebase project, through which we can transfer the floor input to the NodeMCU.
 #Firebase is being added solely for the purpose of demonstration. Since we working from home.
@@ -44,17 +46,22 @@ def listen():    #This function is to listen to a person talking. This function 
 
 def see_people():    #This piece of code is to see the number of people in the lift.
     cam = cv2.VideoCapture(0)
-    init_time = time.time()
+    #init_time = time.time()
+    t=0
     while cam.isOpened():
         _ , frame = cam.read()
         frame,text = qrcode(frame)
         cv2.imshow('LiftView', frame)
         print(text)
-        if text != None:
+       
+        if text != None :
+            t+=1
             print(int(text))
-            if (time.time() - init_time > 10) and int(text) in range(10):
-                push(int(text))
-                #print("sending")
+            init_time = time.time()
+            #if (time.time() - init_time > 10) and int(text) in range(10):
+            if t > 35 and int(text) in range(10):
+                #push(int(text))
+                print("sending")
                 break
 
         k = cv2.waitKey(30) & 0xff
