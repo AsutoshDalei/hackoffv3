@@ -1,7 +1,7 @@
 # Hackoffv3 - Team Dotpy
 Every code related to our project for HackOff3.0 is present here.
 
-## Button_Control:
+## Button_control:
 Arduino script to control the motion of 
 
 ## Command_center:
