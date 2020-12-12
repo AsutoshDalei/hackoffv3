@@ -63,7 +63,6 @@ def see_people():    #This piece of code is to see the number of people in the l
                 push(int(text))
                 print("sending")
                 break
-            
             elif t>60 :
                 break
 
@@ -100,7 +99,8 @@ def get_data():
 def recheck():
     say("any other floor?")
     see_people()
+
 #push(13)
 #get_data()
 #say("please tell or show your required floor number")
-see_people()
+#see_people()
