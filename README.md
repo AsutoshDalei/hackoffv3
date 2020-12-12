@@ -28,6 +28,6 @@ The developed android app is built for the purpose of generating a specific QR c
 5. COVID19: The project's main aim is to eliminate the possibility of physical contact with any surface in the lift. Thus reducing the spread of the Coronavirus
 
 ## Future developments:
-Hand Gesture control mechanism
-Advancements in the App
-More generalized button pressing mechanism
+1.Hand Gesture control mechanism
+2.Advancements in the App
+3.More generalized button pressing mechanism
