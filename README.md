@@ -15,7 +15,7 @@ By this, all he/she has to do is provide a floor number in the app and show the 
 In anycase if the user doesnot have the app, he/she can choose the voice command facility.
 
 ## Button Control Script:
-Arduino script to control the motion of the cursor on the button panel of a lift.
+Arduino script to control the motion of the cursor on the button panel of a lift. The code is built on C++ Arduino IDE.
 
 ## Android Mobile App:
 The developed android app is built for the purpose of generating a specific QR code for each floor, that is givem as an input by the user. 
@@ -29,3 +29,5 @@ The developed android app is built for the purpose of generating a specific QR c
 
 ## Future developments:
 Hand Gesture control mechanism
+Advancements in the App
+More generalized button pressing mechanism
