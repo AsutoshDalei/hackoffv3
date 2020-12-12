@@ -3,7 +3,7 @@
 #Importing all necessary packages : V1
 import speech_recognition as sr
 r = sr.Recognizer()
-from time import sleep
+import time
 import pyttsx3
 engine = pyttsx3.init()
 import numpy as np
@@ -20,9 +20,9 @@ firestore_db = firestore.client()
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
-    engine.setProperty('rate', 125)
+    engine.setProperty('rate', 140)
     voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[0].id)
+    engine.setProperty('voice', voices[1].id)
     engine.say(r)
     engine.runAndWait()
 
@@ -32,7 +32,7 @@ def listen():    #This function is to listen to a person talking. This function 
         print("Kindly tell your floor number now:")
         say("Kindly tell your floor number now:")
         audio_text = r.listen(source)
-        sleep(3)
+        time.sleep(3)
         print("Time over, thankyou")
         try:
             say("Floor is:"+r.recognize_google(audio_text))
@@ -44,23 +44,30 @@ def listen():    #This function is to listen to a person talking. This function 
 
 def see_people():    #This piece of code is to see the number of people in the lift.
     cam = cv2.VideoCapture(0)
+    init_time = time.time()
     while cam.isOpened():
         _ , frame = cam.read()
-
         frame,text = qrcode(frame)
         cv2.imshow('LiftView', frame)
+        print(text)
+        if text != None:
+            print(int(text))
+            if time.time() - init_time > 10:
+                push(int(text))
+                #print("sending")
+                break
 
         k = cv2.waitKey(30) & 0xff
         if k == 27:
             break
-        
+       
     cam.release()
     cv2.destroyAllWindows()
 
 def qrcode(op):  #This piece of code scans for a QR code being shown to it by the user.
     pic=op.copy()
     info = pyzbar.decode(pic)
-    txt='Unreadable'
+    txt = None
     if(len(info)>0):
         for obj in info:
             txt=(obj.data).decode("utf-8")
@@ -79,5 +86,7 @@ def get_data():
     for snapshot in snapshots:
         print(snapshot.to_dict())
 
-#push(3)
+#push(13)
 #get_data()
+#say("please tell or show your required floor number")
+#see_people()
