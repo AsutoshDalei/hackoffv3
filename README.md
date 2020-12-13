@@ -25,7 +25,8 @@ The developed android app is built for the purpose of generating a specific QR c
 2. Easily installable: The entire lift need not be halted for hours for this system to be installed
 3. Easy maintanence: Does not require heavy machinery to be installed or fixed
 4. User friendly: The lift can be easily operated by the user, without internet connectivity   
-5. COVID19: The project's main aim is to eliminate the possibility of physical contact with any surface in the lift. Thus reducing the spread of the Coronavirus
+5. Cheap: This system does not require any sophisticated or costly equipment or technology to be installed.
+6. COVID19: The project's main aim is to eliminate the possibility of physical contact with any surface in the lift. Thus reducing the spread of the Coronavirus
 
 ## Future developments:
 1. Hand Gesture control mechanism.
