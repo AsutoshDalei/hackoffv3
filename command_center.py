@@ -21,7 +21,6 @@ cred = credentials.Certificate(r"C:\Users\asuto\Desktop\hackoff_stuff\hackoffv3-
 firebase_admin.initialize_app(cred)
 firestore_db = firestore.client()
 
-firebase = firebase.FirebaseApplication('https://hackoffv3-default-rtdb.firebaseio.com/', 'NR3qAAdTlu0VCKF4B3wkCRALLArYJBURExXRvbQJ')
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
@@ -60,7 +59,7 @@ def see_people():    #This piece of code is to see the number of people in the l
             t+=1
             print(int(text))
             init_time = time.time()
-            if t > 25 and int(text) in range(10):
+            if t > 35 and int(text) in range(10):
                 #push(int(text))
                 print(f"pressing floor button {text}")
                 say(f"pressing floor button {text}")
