@@ -11,7 +11,8 @@ import cv2
 import pyzbar.pyzbar as pyzbar
 import firebase_admin
 from firebase_admin import credentials, firestore
-from multiprocessing import Process
+
+
 
 
 #We initiate the firebase project, through which we can transfer the floor input to the NodeMCU.
@@ -19,6 +20,8 @@ from multiprocessing import Process
 cred = credentials.Certificate(r"C:\Users\asuto\Desktop\hackoff_stuff\hackoffv3-firebase-adminsdk-4jlgc-e63f6f9a28.json")
 firebase_admin.initialize_app(cred)
 firestore_db = firestore.client()
+
+firebase = firebase.FirebaseApplication('https://hackoffv3-default-rtdb.firebaseio.com/', 'NR3qAAdTlu0VCKF4B3wkCRALLArYJBURExXRvbQJ')
 
 def say(r):      #This function based a TTS engine to convert a given text to speech  
     rate = engine.getProperty('rate')
@@ -46,7 +49,6 @@ def listen():    #This function is to listen to a person talking. This function 
 
 def see_people():    #This piece of code is to see the number of people in the lift.
     cam = cv2.VideoCapture(0)
-    #init_time = time.time()
     t=0
     while cam.isOpened():
         _ , frame = cam.read()
@@ -58,11 +60,12 @@ def see_people():    #This piece of code is to see the number of people in the l
             t+=1
             print(int(text))
             init_time = time.time()
-            #if (time.time() - init_time > 10) and int(text) in range(10):
-            if t > 35 and int(text) in range(10):
-                push(int(text))
-                print("sending")
+            if t > 25 and int(text) in range(10):
+                #push(int(text))
+                print(f"pressing floor button {text}")
+                say(f"pressing floor button {text}")
                 break
+
             elif t>60 :
                 break
 
@@ -89,7 +92,6 @@ def qrcode(op):  #This piece of code scans for a QR code being shown to it by th
 
 def push(floor):
     firestore_db.collection(u'floor_level').add({'floor': floor})
-    say(f"going to floor {str(floor)}")
 
 def get_data():
     snapshots = list(firestore_db.collection(u'floor_level').get())
@@ -100,7 +102,5 @@ def recheck():
     say("any other floor?")
     see_people()
 
-#push(13)
-#get_data()
-#say("please tell or show your required floor number")
-#see_people()
+say("please tell or show your required floor number")
+see_people()
